@@ -1,6 +1,7 @@
 import pygame
 import sys
 from pygame.locals import *
+from player import Player
 
 # ----------------------------------
 # 기본 설정
@@ -24,7 +25,7 @@ FONT_TITLE = pygame.font.Font("DNFBitBitTTF.ttf", 80)
 Main_Buildging = pygame.image.load("OOP_TEAM13/image/Main_Building.png").convert()
 Main_Buildging = pygame.transform.scale(Main_Buildging, (window_W, window_H))  # 창 크기에 맞게 늘리기/줄이기
 
-Howto_Building = pygame.image.load("...").convert()  # ← 두 번째 이미지 이름
+Howto_Building = pygame.image.load("OOP_TEAM13/image/Howto_Buliding.png").convert()  # ← 두 번째 이미지 이름
 Howto_Building = pygame.transform.scale(Howto_Building, (window_W, window_H))
 
 #----------------------------------------
@@ -90,6 +91,20 @@ while running:
                     game_state = "play"
 
     # -------------------------------------------------
+    # Player 객체 생성 코드도 체크
+    # -------------------------------------------------
+    ground_level = window_H - 220 - 50  # 600 - 220 - 50
+
+    player = Player(
+        x=100,
+        y=ground_level,
+        image_path="OOP_TEAM13/image/boo.png",
+        screen_width=window_W,
+        ground_level=ground_level
+    )
+
+
+    # -------------------------------------------------
     # 화면 그리기
     # -------------------------------------------------
     if game_state == "menu":
@@ -97,6 +112,13 @@ while running:
 
         title = FONT_TITLE.render("학교 가BOO자고!", True, BLACK)
         screen.blit(title, (300, 40))
+
+         # --------- 부 움직임 ---------
+        keys = pygame.key.get_pressed()
+        Player.handle_input(keys)  # 좌우 이동 입력 처리
+        Player.update()            # 중력 + 위치 업데이트
+        Player.draw(screen)        # 화면에 부 그리기
+        # -----------------------------
 
         draw_button(btn_explain, "게임설명")
         draw_button(btn_start, "게임시작")
