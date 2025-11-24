@@ -113,6 +113,12 @@ class MapManager:
                 self.stage_start_ticks = now
                 self.entered_myeongsu = True
 
+            # GPA 2.0 이상 → 명수당 진입
+            elif (gpa >= 2.0) and (not self.entered_myeongsu):
+                self.current_stage = "myeongsu"
+                self.stage_start_ticks = now
+                self.entered_myeongsu = True
+
         # -------------------- 명수당 로직 --------------------
         elif self.current_stage == "myeongsu":
             # 일정 시간 버틴 뒤 GPA 확인
