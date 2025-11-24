@@ -107,17 +107,19 @@ class MapManager:
 
         # -------------------- 학생회관 로직 --------------------
         elif self.current_stage == "student":
-            # 학생회관에서 GPA 2.0 이상이 되면 명수당 진입
-            if (gpa >= 2.0) and (not self.entered_myeongsu):
-                self.current_stage = "myeongsu"
-                self.stage_start_ticks = now
-                self.entered_myeongsu = True
+
+            # GPA 2.0 미만 → 즉시 재수강 엔딩
+            if gpa < 2.0:
+                self.state = "ending_retake"
+                self.ending_start_ticks = pygame.time.get_ticks()
+                return
 
             # GPA 2.0 이상 → 명수당 진입
             elif (gpa >= 2.0) and (not self.entered_myeongsu):
                 self.current_stage = "myeongsu"
                 self.stage_start_ticks = now
                 self.entered_myeongsu = True
+
 
         # -------------------- 명수당 로직 --------------------
         elif self.current_stage == "myeongsu":
