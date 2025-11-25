@@ -132,12 +132,31 @@ while running:
 
         # 3) 진행 중인 경우에만 플레이어 동작 가능
         if map_manager.is_playing:
+            # ─────────────────────────────
+            # 맵 시작 후 경과 시간에 따라 이동 범위 조절
+            # ─────────────────────────────
+            now = pygame.time.get_ticks()
+            if map_manager.stage_start_ticks is None:
+                elapsed = 0
+            else:
+                elapsed = now - map_manager.stage_start_ticks
+
+            # 앞 20초: 화면 반절까지만 이동
+            if elapsed < 20000:  # 20,000ms = 20초
+                player.set_half_movement()
+            # 뒤 10초: 화면 전체 이동 가능
+            else:
+                player.set_full_movement()
+
+            # ─────────────────────────────
+            # 플레이어 조작 & 업데이트
+            # ─────────────────────────────
             keys = pygame.key.get_pressed()
             player.handle_input(keys)
             player.update()
             player.draw(screen)
 
-        # 4) (참고) GPA & HP를 화면에 띄우려면 아래 추가 가능
+        # 4) GPA & HP 표시 (수정할 부분임 참고만 할 것)
         gpa_text = FONT.render(f"GPA: {gpa:.2f}", True, (0,0,0))
         hp_text = FONT.render(f"HP: {hp}", True, (0,0,0))
         screen.blit(gpa_text, (20, 20))
